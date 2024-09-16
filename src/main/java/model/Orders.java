@@ -24,18 +24,18 @@ public class Orders {
     private String direccionEntrega;
     private String metodoDePago;
     private double total;
-    private Customer cliente;
+    private Customer customer;
     private String estado;
     private String comentarios;
 
     public Orders(LocalDateTime fechaPedido, Date fechaEntrega, String direccionEntrega, String metodoDePago,
-                  double total, Customer cliente, String estado, String comentarios) {
+                  double total, Customer customer, String estado, String comentarios) {
         this.fechaPedido = fechaPedido;
         this.fechaEntrega = fechaEntrega;
         this.direccionEntrega = direccionEntrega;
         this.metodoDePago = metodoDePago;
         this.total = total;
-        this.cliente = cliente;
+        this.customer = customer;
         this.estado = estado;
         this.comentarios = comentarios;
     }

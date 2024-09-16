@@ -13,20 +13,30 @@ import lombok.Setter;
 public class Customer {
 
 // ya lo tenemos creado en SQL
-    private String nombre, primerApellido, segundoApellido, email;
+    private String name, first_lastname, second_lastname, email;
 
-    private String contrasena;
+    private String password;
 
     private int id;
 
-    private int telefono;
+    private int phone;
 
-    public Customer(String nombre, String primerApellido, String segundoApellido, String email, String contrasena, int telefono) {
-        this.nombre = nombre;
-        this.primerApellido = primerApellido;
-        this.segundoApellido = segundoApellido;
+    public Customer(String name, String first_lastname, String second_lastname, String email, String password, int phone) {
+        this.name = name;
+        this.first_lastname = first_lastname;
+        this.second_lastname = second_lastname;
         this.email = email;
-        this.contrasena = contrasena;
-        this.telefono = telefono;
+        this.password = password;
+        this.phone = phone;
+    }
+
+    public Customer(String name, String first_lastname, String second_lastname, String email, String password, int id, int phone) {
+        this.name = name;
+        this.first_lastname = first_lastname;
+        this.second_lastname = second_lastname;
+        this.email = email;
+        this.password = password;
+        this.id = id;
+        this.phone = phone;
     }
 }
