@@ -1,3 +1,5 @@
+package repositories;
+
 import database.TiendaConnection;
 import model.Customer;
 

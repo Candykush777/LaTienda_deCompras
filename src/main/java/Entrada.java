@@ -1,7 +1,10 @@
 import database.TiendaConnection;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import repositories.ProductRepository;
+import view.Tienda;
 
+import javax.swing.*;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -17,116 +20,47 @@ public class Entrada {
 
     public static void main(String[] args) {
 
+        // Cargar productos en la base de datos
+        cargarProductos();
+
+        // Ejecutar la interfaz gráfica en el hilo de despacho de eventos
+        SwingUtilities.invokeLater(() -> {
+            Tienda tienda = new Tienda();
+            tienda.setVisible(true);
+        });
+    }
+private static void cargarProductos(){
         BufferedReader br = null;
         Connection connection = TiendaConnection.getConnection();
-        PreparedStatement preparedStatement = null;
+        ProductRepository productRepository = new ProductRepository(connection);  // Nuevo
 
-
-//URL ---> https://dummyjson.com/products
         try {
             URL url = new URL("https://dummyjson.com/products");
-            //HTTPConnection --> abrir la URL
             HttpURLConnection connectionHttp = (HttpURLConnection) url.openConnection();
-            //BufferedReader --> leer la contestacion de la pagina -> TXT
             br = new BufferedReader(new InputStreamReader(connectionHttp.getInputStream()));
-            String lectura = br.readLine();  //System.out.println(lectura);  lee el jason en consola
+            String lectura = br.readLine();
             JSONObject respuesta = new JSONObject(lectura);
             JSONArray products = respuesta.getJSONArray("products");
-           /* for (int i = 0; i < products.length(); i++) {
 
-                JSONObject product =products.getJSONObject(i);
-
-                String title = product.getString("title");
-                String price = String.valueOf(product.getDouble("price"));
-                String id = String.valueOf(product.getInt("id"));
-                System.out.println(title + " " + price + " " +id);
-            System.out.println(respuesta);
-            pero lo queremos pAsar de texto a jason   aqui sacamos la lista de lo pedido como ejemplo
-            }*/
-
-            //Preparamos la query, en este caso queremos insertar los datos a la bbdd desde jason
-
-            String insertQuery = "INSERT INTO products " +
-                    "(id, title, description, category, price, discountPercentage, rating, stock, sku, weight, dimensions_width," +
-                    " dimensions_height, dimensions_depth, warrantyInformation, shippingInformation, availabilityStatus, images, thumbnail)" +
-                    "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
-
+            // Ahora insertamos cada producto usando el ProductRepository
             for (int i = 0; i < products.length(); i++) {
-
                 JSONObject product = products.getJSONObject(i);
-
-                int id = product.getInt("id");
-                String title = product.getString("title");
-                String description = product.getString("description");
-                String category = product.getString("category");
-                double price = product.getDouble("price");
-                double discountPercentage = product.getDouble("discountPercentage");
-                double rating = product.getDouble("rating");
-                int stock = product.getInt("stock");
-                String sku = product.getString("sku");
-                double weight = product.getDouble("weight");
-                JSONObject dimensions = product.getJSONObject("dimensions");
-                double dimensions_width = dimensions.getDouble("width");
-                double dimensions_height = dimensions.getDouble("height");
-                double dimensions_depth = dimensions.getDouble("depth");
-                String warrantyInformation = product.getString("warrantyInformation");
-                String shippingInformation = product.getString("shippingInformation");
-                String availabilityStatus = product.getString("availabilityStatus");
-                JSONArray imagesArray =product.getJSONArray("images");
-                String images = imagesArray.toString();
-                String thumbnail = product.getString("thumbnail");
-
-                //Preparar y ejecutar el statement
-
-
-                preparedStatement = connection.prepareStatement(insertQuery);
-                preparedStatement.setInt(1, id);
-                preparedStatement.setString(2, title);
-                preparedStatement.setString(3, description);
-                preparedStatement.setString(4, category);
-                preparedStatement.setDouble(5, price);
-                preparedStatement.setDouble(6, discountPercentage);
-                preparedStatement.setDouble(7, rating);
-                preparedStatement.setInt(8, stock);
-                preparedStatement.setString(9, sku);
-                preparedStatement.setDouble(10, weight);
-                preparedStatement.setDouble(11, dimensions_width);
-                preparedStatement.setDouble(12, dimensions_height);
-                preparedStatement.setDouble(13, dimensions_depth);
-                preparedStatement.setString(14, warrantyInformation);
-                preparedStatement.setString(15, shippingInformation);
-                preparedStatement.setString(16, availabilityStatus);
-                preparedStatement.setString(17, images);
-                preparedStatement.setString(18, thumbnail);
-
-                preparedStatement.executeUpdate(); //ejecutar la insercion
-
-
+                productRepository.insertProduct(product);  // Llamada a método de inserción
             }
 
-            System.out.println(" Productos cargados con éxito en la bbdd ");
-
+            System.out.println("Productos cargados con éxito en la bbdd");
 
         } catch (MalformedURLException e) {
-
-            System.out.println("Error en la codificacion de la URL");
+            System.out.println("Error en la codificación de la URL");
             System.out.println(e.getMessage());
         } catch (IOException e) {
-            System.out.println("Error de internet");
+            System.out.println("Error de conexión a internet");
             System.out.println(e.getMessage());
         } catch (SQLException e) {
             System.out.println("Error al insertar los datos en SQL");
             System.out.println(e.getMessage());
         } finally {
-            try {
-                if (preparedStatement != null) preparedStatement.close();
-                if (connection != null) TiendaConnection.closeConnection();
-            } catch (SQLException e) {
-                System.out.println("Error al cerrar recursos");
-                System.out.println(e.getMessage());
-            }
-
+            if (connection != null) TiendaConnection.closeConnection();
         }
-
     }
 }

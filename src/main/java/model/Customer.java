@@ -28,15 +28,6 @@ public class Customer {
         this.email = email;
         this.password = password;
         this.phone = phone;
-    }
+    }}
 
-    public Customer(String name, String first_lastname, String second_lastname, String email, String password, int id, int phone) {
-        this.name = name;
-        this.first_lastname = first_lastname;
-        this.second_lastname = second_lastname;
-        this.email = email;
-        this.password = password;
-        this.id = id;
-        this.phone = phone;
-    }
-}
+
