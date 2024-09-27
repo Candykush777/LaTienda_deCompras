@@ -39,21 +39,9 @@ public class Tienda extends JFrame {
         panel.add(altaClienteBtn);
         add(panel);
 
-        //Acciones de los botones
 
-        iniciarSesionBtn.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(null,"Iniciar Sesión seleccionado");
-            }
-        });
 
-        altaClienteBtn.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(null, "Alta de Cliente selecionado");
-            }
-        });
+
 
     }
 
