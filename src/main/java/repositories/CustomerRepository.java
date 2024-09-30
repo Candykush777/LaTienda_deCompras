@@ -195,8 +195,17 @@ public class CustomerRepository {
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             preparedStatement.setString(1,email);
             ResultSet resultSet =preparedStatement.executeQuery(); //ejecutamos la consulta
+
+            if(resultSet.next()){ //si encuentra resultado
+
+                String foundEmail = resultSet.getString("email");
+                String foundPassword = resultSet.getString("password");
+                customer = new Customer(foundEmail,foundPassword);
+
+
+            }
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            System.out.println("Error de base de datos: " + e.getMessage());
         }
 
         return customer;

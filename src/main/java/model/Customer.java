@@ -12,7 +12,7 @@ import lombok.Setter;
 
 public class Customer {
 
-// ya lo tenemos creado en SQL
+    // ya lo tenemos creado en SQL
     private String name, first_lastname, second_lastname, email;
 
     private String password;
@@ -28,6 +28,12 @@ public class Customer {
         this.email = email;
         this.password = password;
         this.phone = phone;
-    }}
+    }
+
+    public Customer(String email, String password) {
+        this.email = email;
+        this.password = password;
+    }
+}
 
 
