@@ -75,6 +75,9 @@ public class TiendaController {
         //Ahora queremos obetner el email y contraseña del formulario dentro del view
 
         String email=tienda.getEmailField().getText();
+        String password=new String(tienda.getPasswordField().getPassword());
+
+        //Buscamos el cliente en la bbdd usando el email
 
 
     }

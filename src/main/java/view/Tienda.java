@@ -29,6 +29,8 @@ public class Tienda extends JFrame {
         setSize(400,200); //tamaño de la ventana
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null); //centrar la ventana
+
+
         emailField=new JTextField(20);
         passwordField=new JPasswordField(20);
 

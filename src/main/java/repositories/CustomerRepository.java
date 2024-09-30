@@ -185,5 +185,22 @@ public class CustomerRepository {
 
     }
 
+    public Customer findByEmail(String email) {
+
+        Customer customer = null;
+        String query = "SELECT email, password FROM customers WHERE email = ? ";
+        //consultamso con la base de datos
+        try {
+            Connection connection = TiendaConnection.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setString(1,email);
+            ResultSet resultSet =preparedStatement.executeQuery(); //ejecutamos la consulta
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return customer;
+    }
+
 }
 
