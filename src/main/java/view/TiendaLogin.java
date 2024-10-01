@@ -31,7 +31,6 @@ public class TiendaLogin extends JFrame {
 
         //creamos panel para el layout
         JPanel panel = new JPanel(new GridLayout(3, 2, 10, 10));
-        setLayout(new GridLayout(3, 2, 10, 10));
         panel.add(emailLabel);
         panel.add(emailField);
         panel.add(passwordLabel);

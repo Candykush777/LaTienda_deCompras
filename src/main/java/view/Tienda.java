@@ -13,6 +13,8 @@ import java.awt.event.ActionListener;
 
 public class Tienda extends JFrame {
 
+
+    private TiendaLogin tiendaLogin;
     private JButton iniciarSesionBtn;
     private JButton altaClienteBtn;
 
@@ -66,7 +68,7 @@ public class Tienda extends JFrame {
 
         getContentPane().removeAll();
 
-        TiendaLogin tiendaLogin=new TiendaLogin();
+        tiendaLogin = new TiendaLogin();
 
         add(tiendaLogin);
 
@@ -74,5 +76,6 @@ public class Tienda extends JFrame {
         repaint();
 
     }
+
 
 }
