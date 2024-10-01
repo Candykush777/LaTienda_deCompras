@@ -15,24 +15,17 @@ public class Tienda extends JFrame {
 
     private JButton iniciarSesionBtn;
     private JButton altaClienteBtn;
-    private JTextField emailField;
-    private JPasswordField passwordField;
-
 
     //Configuramos la Ventana Principal
 
-    public Tienda(){
+    public Tienda() {
 
         //Inicializamos lo que lleva la interfaz
 
         setTitle("Tienda de Compras");
-        setSize(400,200); //tamaño de la ventana
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setSize(400, 200); //tamaño de la ventana
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);//Para que termine la app cuando el usuario cierre la ventana
         setLocationRelativeTo(null); //centrar la ventana
-
-
-        emailField=new JTextField(20);
-        passwordField=new JPasswordField(20);
 
         //Crear los botones
 
@@ -41,15 +34,44 @@ public class Tienda extends JFrame {
 
         //Panel para contener y organizar los botones
 
-        JPanel panel =new JPanel();
-        panel.setLayout(new GridLayout(2,1,10,10));
+        JPanel panel = new JPanel();//contenedor para componentes
+        panel.setLayout(new GridLayout(2, 1, 10, 10));//diseño del panel
         panel.add(iniciarSesionBtn);
         panel.add(altaClienteBtn);
-        add(panel);
+        add(panel);//para mostrar los botones en la ventana
+
+        //Creamos las etiquetas para que  intrdoczcan en el field los datos
+
+        iniciarSesionBtn.addActionListener(e -> {
+            mostrarTiendaLogin();
+        });
+
+        /* Antes de Java 8 se hacia así :
+
+        iniciarSesionBtn.addActionListener(new ActionListener() {
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        mostrarInicioSesion();
+    }
+            });*/
 
 
 
 
+    }
+
+    private void mostrarTiendaLogin() {
+
+        //Limpiamos lo que haya en la ventana
+
+        getContentPane().removeAll();
+
+        TiendaLogin tiendaLogin=new TiendaLogin();
+
+        add(tiendaLogin);
+
+        revalidate();
+        repaint();
 
     }
 
