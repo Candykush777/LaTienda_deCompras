@@ -9,7 +9,7 @@ import java.awt.*;
 @Getter
 @Setter
 
-public class TiendaLogin extends JFrame {
+public class TiendaLogin extends JPanel {
 
     private JTextField emailField;
     private JPasswordField passwordField;
@@ -17,27 +17,22 @@ public class TiendaLogin extends JFrame {
 
 
     public TiendaLogin() {
-
-        //Inicializamos campos para texto y botón
-
+// Inicializamos campos para texto y botón
         emailField = new JTextField(20);
         passwordField = new JPasswordField(20);
         iniciarSesionBtn = new JButton("Iniciar Sesión");
 
-        //Hacemos las etiquetas
-
+        // Hacemos las etiquetas
         JLabel emailLabel = new JLabel("Email");
         JLabel passwordLabel = new JLabel("Contraseña");
 
-        //creamos panel para el layout
-        JPanel panel = new JPanel(new GridLayout(3, 2, 10, 10));
-        panel.add(emailLabel);
-        panel.add(emailField);
-        panel.add(passwordLabel);
-        panel.add(passwordField);
-        panel.add(iniciarSesionBtn);
-
-        add(panel);
+        // Creamos panel para el layout
+        setLayout(new GridLayout(3, 2, 10, 10)); // Usar el layout directamente aquí
+        add(emailLabel);
+        add(emailField);
+        add(passwordLabel);
+        add(passwordField);
+        add(iniciarSesionBtn);
     }
 
 
