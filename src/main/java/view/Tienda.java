@@ -2,6 +2,7 @@ package view;
 
 import lombok.Getter;
 import lombok.Setter;
+import repositories.CustomerRepository;
 
 import javax.swing.*;
 import java.awt.*;
@@ -25,7 +26,7 @@ public class Tienda extends JFrame {
         //Inicializamos lo que lleva la interfaz
 
         setTitle("Tienda de Compras");
-        setSize(400, 200); //tamaño de la ventana
+        setSize(600, 400); //tamaño de la ventana
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);//Para que termine la app cuando el usuario cierre la ventana
         setLocationRelativeTo(null); //centrar la ventana
 
@@ -44,9 +45,7 @@ public class Tienda extends JFrame {
 
         //Creamos las etiquetas para que  intrdoczcan en el field los datos
 
-        iniciarSesionBtn.addActionListener(e -> {
-            mostrarTiendaLogin();
-        });
+
 
         /* Antes de Java 8 se hacia así :
 
@@ -62,20 +61,7 @@ public class Tienda extends JFrame {
 
     }
 
-    private void mostrarTiendaLogin() {
 
-        //Limpiamos lo que haya en la ventana
-
-        getContentPane().removeAll();
-
-        tiendaLogin = new TiendaLogin();
-
-        add(tiendaLogin);
-
-        revalidate();
-        repaint();
-
-    }
 
 
 }
