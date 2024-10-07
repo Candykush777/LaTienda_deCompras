@@ -1,8 +1,10 @@
 package repositories;
 
+import database.EsquemaDB;
 import database.TiendaConnection;
 import model.Customer;
 
+import javax.swing.*;
 import java.sql.*;
 
 public class CustomerRepository {
@@ -19,11 +21,13 @@ public class CustomerRepository {
     // executeUpadate(SQL) -> "Insert into alumnos () VALUES()" -> int, numero filas afectadas
     //ResultSet R
 
-    public void insertarCustomer(Customer newCustomer) {
+    public void registrarCustomer(Customer newCustomer) {
 
         Connection connection = TiendaConnection.getConnection();
         Statement statement = null;
         PreparedStatement preparedStatement = null;
+
+        if(!existeEmail(newCustomer.getEmail()))
         try {
 //INSERT
             String query = "INSERT INTO customer(name,first_lastname,second_lastname,email,password,phone) VALUES (?,?,?,?,?,?)";
@@ -35,13 +39,23 @@ public class CustomerRepository {
             preparedStatement.setString(4, newCustomer.getEmail());
             preparedStatement.setString(5, newCustomer.getPassword());
             preparedStatement.setInt(6, newCustomer.getPhone());
-            preparedStatement.executeUpdate();
+
+            int clientesInsertados =preparedStatement.executeUpdate();
             preparedStatement.close();
+
+            if(clientesInsertados>0){
+
+                JOptionPane.showConfirmDialog(null, "Cliente registrado con éxito. ");
+            }else {
+                JOptionPane.showMessageDialog(null,"No se pudo registrar al cliente, ya existe Email");
+            }
 
         } catch (SQLException e) {
             System.out.println("Fallo en la sentencia SQL");
             System.out.println(e.getMessage());
-        } finally {
+        }
+
+        finally {
 
             //Cerramos conexión
             TiendaConnection.closeConnection();
@@ -209,6 +223,41 @@ public class CustomerRepository {
         }
 
         return customer;
+    }
+
+    public boolean existeEmail(String email){
+
+        boolean estaEmail =false;
+        Connection connection= TiendaConnection.getConnection();
+
+        String query =String.format("SELECT %s FROM %s WHERE %s = ?" ,
+
+                EsquemaDB.COL_EMAIL,
+                EsquemaDB.TAB_CUSTOMERS,
+                EsquemaDB.COL_EMAIL);
+
+        try {
+            PreparedStatement preparedStatement= connection.prepareStatement(query);
+
+            preparedStatement.setString(1,email);
+            ResultSet resultSet=preparedStatement.executeQuery();
+
+            //Vamos a comprobar si hay algún correo
+
+            if(resultSet.next()){
+                estaEmail=true; // Se ha encontrado el correo
+
+
+            }
+
+
+
+        } catch (SQLException e) {
+            System.out.println("Error de BBDD : " + e.getMessage());
+        }
+
+
+        return estaEmail;
     }
 
 }

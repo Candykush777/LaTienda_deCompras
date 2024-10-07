@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import model.Customer;
+import org.mindrot.jbcrypt.BCrypt;
 import repositories.CustomerRepository;
 import view.Tienda;
 
@@ -41,7 +43,7 @@ public class TiendaController {
         tienda.getIniciarSesionBtn().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(tienda, "Iniciar Sesión seleccionado");
+                mostrarLogin();
             }
         });
 
@@ -57,7 +59,7 @@ public class TiendaController {
 
     private void darDeAltaCliente(){
 
-        JOptionPane.showMessageDialog(tienda, "Dar de alta Cliente seleccionado");
+        JOptionPane.showMessageDialog(tienda, "Dar de alta Cliente seleccionado");//hay que modificar esto
     }
 
     private void IniciarSesion(){
@@ -77,9 +79,24 @@ public class TiendaController {
         String email=tienda.getTiendaLogin().getCorreoField().getText();
         String password = new String(tienda.getTiendaLogin().getPasswordField().getPassword());
 
+        Customer customer =customerRepository.findByEmail(email);
+
+        if(customer != null && BCrypt.checkpw(password, customer.getPassword())){
+            JOptionPane.showMessageDialog(tienda, "Inicio de sesión exitoso");
+        }
+        else {
+            intentosFallidos++;
+            JOptionPane.showMessageDialog(tienda, "Credenciales Incorrectas, Intentos  : " +intentosFallidos);
+        }
+
         //Buscamos el cliente en la bbdd usando el email
 
 
     }
 
+    private void mostrarLogin(){
+
+       // Tienda
+
+    }
 }
