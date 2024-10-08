@@ -3,6 +3,7 @@ package repositories;
 import database.EsquemaDB;
 import database.TiendaConnection;
 import model.Customer;
+import org.mindrot.jbcrypt.BCrypt;
 
 import javax.swing.*;
 import java.sql.*;
@@ -27,40 +28,38 @@ public class CustomerRepository {
         Statement statement = null;
         PreparedStatement preparedStatement = null;
 
-        if(!existeEmail(newCustomer.getEmail()))
-        try {
+        if (!existeEmail(newCustomer.getEmail()))
+            try {
 //INSERT
-            String query = "INSERT INTO customer(name,first_lastname,second_lastname,email,password,phone) VALUES (?,?,?,?,?,?)";
+                String query = "INSERT INTO customer(name,first_lastname,second_lastname,email,password,phone) VALUES (?,?,?,?,?,?)";
 
-            preparedStatement = connection.prepareStatement(query);
-            preparedStatement.setString(1, newCustomer.getName());
-            preparedStatement.setString(2, newCustomer.getFirst_lastname());
-            preparedStatement.setString(3, newCustomer.getSecond_lastname());
-            preparedStatement.setString(4, newCustomer.getEmail());
-            preparedStatement.setString(5, newCustomer.getPassword());
-            preparedStatement.setInt(6, newCustomer.getPhone());
+                preparedStatement = connection.prepareStatement(query);
+                preparedStatement.setString(1, newCustomer.getName());
+                preparedStatement.setString(2, newCustomer.getFirst_lastname());
+                preparedStatement.setString(3, newCustomer.getSecond_lastname());
+                preparedStatement.setString(4, newCustomer.getEmail());
+                preparedStatement.setString(5, newCustomer.getPassword());
+                preparedStatement.setInt(6, newCustomer.getPhone());
 
-            int clientesInsertados =preparedStatement.executeUpdate();
-            preparedStatement.close();
+                int clientesInsertados = preparedStatement.executeUpdate();
+                preparedStatement.close();
 
-            if(clientesInsertados>0){
+                if (clientesInsertados > 0) {
 
-                JOptionPane.showConfirmDialog(null, "Cliente registrado con éxito. ");
-            }else {
-                JOptionPane.showMessageDialog(null,"No se pudo registrar al cliente, ya existe Email");
+                    JOptionPane.showConfirmDialog(null, "Cliente registrado con éxito. ");
+                } else {
+                    JOptionPane.showMessageDialog(null, "No se pudo registrar al cliente, ya existe Email");
+                }
+
+            } catch (SQLException e) {
+                System.out.println("Fallo en la sentencia SQL");
+                System.out.println(e.getMessage());
+            } finally {
+
+                //Cerramos conexión
+                TiendaConnection.closeConnection();
+                connection = null;
             }
-
-        } catch (SQLException e) {
-            System.out.println("Fallo en la sentencia SQL");
-            System.out.println(e.getMessage());
-        }
-
-        finally {
-
-            //Cerramos conexión
-            TiendaConnection.closeConnection();
-            connection = null;
-        }
     }
 
     //DELETE
@@ -199,7 +198,7 @@ public class CustomerRepository {
 
     }
 
-    public Customer findByEmail(String email) {
+    public Customer findByEmail(String email, String passwordIngresada) {
 
         Customer customer = null;
         String query = "SELECT email, password FROM customers WHERE email = ? ";
@@ -207,49 +206,54 @@ public class CustomerRepository {
         try {
             Connection connection = TiendaConnection.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(query);
-            preparedStatement.setString(1,email);
-            ResultSet resultSet =preparedStatement.executeQuery(); //ejecutamos la consulta
+            preparedStatement.setString(1, email);
+            ResultSet resultSet = preparedStatement.executeQuery(); //ejecutamos la consulta
 
-            if(resultSet.next()){ //si encuentra resultado
+            if (resultSet.next()) { //si encuentra resultado
 
                 String foundEmail = resultSet.getString("email");
                 String foundPassword = resultSet.getString("password");
-                customer = new Customer(foundEmail,foundPassword);
+                if (BCrypt.checkpw(passwordIngresada, foundPassword)) {
+                    customer = new Customer(foundEmail, foundPassword);
 
 
+                }
             }
+            preparedStatement.close();
+            resultSet.close();
+
+
         } catch (SQLException e) {
             System.out.println("Error de base de datos: " + e.getMessage());
         }
 
-        return customer;
+        return customer; // Retorna null, tengo que ver bien como funciona esto o un mensaje ¡¡
     }
 
-    public boolean existeEmail(String email){
+    public boolean existeEmail(String email) {
 
-        boolean estaEmail =false;
-        Connection connection= TiendaConnection.getConnection();
+        boolean estaEmail = false;
+        Connection connection = TiendaConnection.getConnection();
 
-        String query =String.format("SELECT %s FROM %s WHERE %s = ?" ,
+        String query = String.format("SELECT %s FROM %s WHERE %s = ?",
 
                 EsquemaDB.COL_EMAIL,
                 EsquemaDB.TAB_CUSTOMERS,
                 EsquemaDB.COL_EMAIL);
 
         try {
-            PreparedStatement preparedStatement= connection.prepareStatement(query);
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
 
-            preparedStatement.setString(1,email);
-            ResultSet resultSet=preparedStatement.executeQuery();
+            preparedStatement.setString(1, email);
+            ResultSet resultSet = preparedStatement.executeQuery();
 
             //Vamos a comprobar si hay algún correo
 
-            if(resultSet.next()){
-                estaEmail=true; // Se ha encontrado el correo
+            if (resultSet.next()) {
+                estaEmail = true; // Se ha encontrado el correo
 
 
             }
-
 
 
         } catch (SQLException e) {
@@ -258,6 +262,37 @@ public class CustomerRepository {
 
 
         return estaEmail;
+    }
+
+    private void IniciarSesion() {
+
+        Connection connection = TiendaConnection.getConnection();
+        Customer customer = null;
+        ResultSet resultSet;
+
+        String query = String.format("SELECT * FROM %s WHERE %s = ?, AND %s = ?",
+                EsquemaDB.TAB_CUSTOMERS, EsquemaDB.COL_EMAIL, EsquemaDB.COL_PASSWORD
+
+        );
+
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setString(1, customer.getEmail());
+            preparedStatement.setString(2, customer.getPassword());
+            resultSet = preparedStatement.executeQuery();
+
+            if (resultSet.next()) {
+
+                customer = new Customer();
+
+            }
+
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+
     }
 
 }

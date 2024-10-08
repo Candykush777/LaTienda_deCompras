@@ -20,7 +20,12 @@ import java.awt.event.ActionListener;
 
 public class TiendaController {
 
-    private Tienda tienda;
+
+
+
+}
+
+   /* private Tienda tienda;
     private CustomerRepository customerRepository;
     private int intentosFallidos = 0;
     private final int MAX_INTENTOS =3;
@@ -31,12 +36,16 @@ public class TiendaController {
         initController();
     }
 
-    /* public TiendaController(Tienda tienda) {
+    /*
+    De momento quitamos el controlador que nos esta dando problemas y
+    vamos a poner cada logica y boton en su propia ventana
+
+    public TiendaController(Tienda tienda) {
         this.tienda = tienda;
         initController(); // Llama a un método específico para inicializar
     }*/
 
-    private void initController() {
+    /*private void initController() {
 
         //Configuramos los ActionListeners para los botones
 
@@ -55,14 +64,14 @@ public class TiendaController {
         });
 
 
-    }
+    */
 
-    private void darDeAltaCliente(){
+   /* private void darDeAltaCliente(){
 
         JOptionPane.showMessageDialog(tienda, "Dar de alta Cliente seleccionado");//hay que modificar esto
     }
 
-    private void IniciarSesion(){
+   /* private void IniciarSesion(){
 
         //lo primero es verificar si han superado los intentos, sino es así se continua d emanera normal.
 
