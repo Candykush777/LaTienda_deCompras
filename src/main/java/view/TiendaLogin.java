@@ -30,7 +30,7 @@ public class TiendaLogin extends JFrame {
         setTitle("Iniciar sesión");
         setSize(400, 200);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLayout(new GridLayout(3, 2));
+        setLayout(new GridLayout(4, 2));
 
 
         // Crear componentes
@@ -47,33 +47,36 @@ public class TiendaLogin extends JFrame {
         add(correoField);
         add(passwordLabel);
         add(passwordField);
+        add(loginBoton);
 
         //acciones de los botones
 
         loginBoton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                ;
+
+
             }
         });
 
-
     }
+        private void IniciarSesion (){
+            String email = correoField.getText();
+            String passwordIngresada = new String(passwordField.getPassword());
 
-    private void IniciarSesion() {
-
-        String email = correoField.getText();
-        String passwordIngresada=new String(passwordField.getPassword());
-
-        Customer customer=customerRepository.findByEmail(email,passwordIngresada);
-        if(customer !=null){
-            JOptionPane.showMessageDialog(this,"Inico sesión con éxito");
-            // aqui abriria el menu principal la ventana por hacer .. creo TiendaMenuPrincipal y el metodo para abrirlo
-
+            // Llamada al método 'IniciarSesion' desde 'CustomerRepository'
+            Customer customer = customerRepository.realizarLogin(email, passwordIngresada);
+            if (customer != null) {
+                JOptionPane.showMessageDialog(this, "Inicio de sesión con éxito");
+                // Aquí abrirías el menú principal o alguna otra acción
+                dispose(); // Cierra la ventana de inicio de sesión
+            } else {
+                intentosFallidos++;
+                JOptionPane.showMessageDialog(this, "Credenciales incorrectas. Intentos fallidos: " + intentosFallidos);
+            }
         }
 
 
-    }
 
 
     //lo primero es verificar si han superado los intentos, sino es así se continua d emanera normal.

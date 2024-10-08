@@ -135,6 +135,8 @@ public class CustomerRepository {
 
     //READ
 
+    //Mirar biene ste metodo porque ocn sout me parece raro hay que hacerle lso JOption lo mismo
+
     public void obtenerCustomerPorId(int id) {
 
         Connection connection = TiendaConnection.getConnection();
@@ -198,10 +200,11 @@ public class CustomerRepository {
 
     }
 
-    public Customer findByEmail(String email, String passwordIngresada) {
+    public Customer realizarLogin(String email, String passwordIngresada) {
 
         Customer customer = null;
-        String query = "SELECT email, password FROM customers WHERE email = ? ";
+        String query = String.format("SELECT id, name, first_lastname, second_lastname, email, phone, password FROM %s WHERE %s = ?",
+                EsquemaDB.TAB_CUSTOMERS, EsquemaDB.COL_EMAIL);
         //consultamso con la base de datos
         try {
             Connection connection = TiendaConnection.getConnection();
@@ -209,12 +212,19 @@ public class CustomerRepository {
             preparedStatement.setString(1, email);
             ResultSet resultSet = preparedStatement.executeQuery(); //ejecutamos la consulta
 
-            if (resultSet.next()) { //si encuentra resultado
+            if (resultSet.next()) { //si encuentra resultado, recupera los datos del usuario
 
                 String foundEmail = resultSet.getString("email");
                 String foundPassword = resultSet.getString("password");
                 if (BCrypt.checkpw(passwordIngresada, foundPassword)) {
-                    customer = new Customer(foundEmail, foundPassword);
+                    customer = new Customer(
+
+                            resultSet.getString("name"),
+                            resultSet.getString("first_lastname"),
+                            resultSet.getString("second_lastname"),
+                            resultSet.getString("email"),
+                            resultSet.getInt("id"),
+                            resultSet.getInt("phone"));
 
 
                 }
@@ -264,7 +274,7 @@ public class CustomerRepository {
         return estaEmail;
     }
 
-    private void IniciarSesion() {
+   /* private void IniciarSesion() {
 
         Connection connection = TiendaConnection.getConnection();
         Customer customer = null;
@@ -284,6 +294,7 @@ public class CustomerRepository {
             if (resultSet.next()) {
 
                 customer = new Customer();
+//crear customer con sus datos
 
             }
 
@@ -293,7 +304,7 @@ public class CustomerRepository {
         }
 
 
-    }
+    }*/
 
 }
 
