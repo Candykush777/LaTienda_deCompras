@@ -64,14 +64,14 @@ public class TiendaController {
         });
 
 
-    */
 
-   /* private void darDeAltaCliente(){
+
+   private void darDeAltaCliente(){
 
         JOptionPane.showMessageDialog(tienda, "Dar de alta Cliente seleccionado");//hay que modificar esto
     }
 
-   /* private void IniciarSesion(){
+   private void IniciarSesion(){
 
         //lo primero es verificar si han superado los intentos, sino es así se continua d emanera normal.
 
@@ -109,3 +109,4 @@ public class TiendaController {
 
     }
 }
+*/
