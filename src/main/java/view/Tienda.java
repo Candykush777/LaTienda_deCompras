@@ -43,18 +43,20 @@ public class Tienda extends JFrame {
         panel.add(altaClienteBtn);
         add(panel);//para mostrar los botones en la ventana
 
-        //Creamos las etiquetas para que  intrdoczcan en el field los datos
 
-
-
-        /* Antes de Java 8 se hacia así :
-
-        iniciarSesionBtn.addActionListener(new ActionListener() {
+iniciarSesionBtn.addActionListener(new ActionListener() {
     @Override
     public void actionPerformed(ActionEvent e) {
-        mostrarInicioSesion();
+        abrirLogin();
     }
-            });*/
+});
+
+altaClienteBtn.addActionListener(new ActionListener() {
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        abrirDardealta();
+    }
+});
 
 
 
@@ -62,6 +64,17 @@ public class Tienda extends JFrame {
     }
 
 
+    private void abrirLogin(){
+
+        new TiendaLogin();
+        this.dispose();
+
+    }
+
+    private void abrirDardealta(){
+        new TiendaDarAltaCliente();
+        this.dispose();
+    }
 
 
 }

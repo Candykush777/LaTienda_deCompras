@@ -39,7 +39,7 @@ public class CustomerRepository {
                 preparedStatement.setString(3, newCustomer.getSecond_lastname());
                 preparedStatement.setString(4, newCustomer.getEmail());
                 preparedStatement.setString(5, newCustomer.getPassword());
-                preparedStatement.setInt(6, newCustomer.getPhone());
+                preparedStatement.setString(6, newCustomer.getPhone());
 
                 int clientesInsertados = preparedStatement.executeUpdate();
                 preparedStatement.close();
@@ -111,7 +111,7 @@ public class CustomerRepository {
             preparedStatement.setString(3, customer.getSecond_lastname());
             preparedStatement.setString(4, customer.getEmail());
             preparedStatement.setString(5, customer.getPassword());
-            preparedStatement.setInt(6, customer.getPhone());
+            preparedStatement.setString(6, customer.getPhone());
             preparedStatement.setInt(7, customer.getId());
 
             int filaafctadas = preparedStatement.executeUpdate();
@@ -163,7 +163,7 @@ public class CustomerRepository {
                         resulset.getString("email"),
                         resulset.getString("password"),
                         resulset.getInt("id"),
-                        resulset.getInt("phone"));
+                        resulset.getString("phone"));
 
                 //Imprimimos los datos del Customer
 
@@ -224,7 +224,7 @@ public class CustomerRepository {
                             resultSet.getString("second_lastname"),
                             resultSet.getString("email"),
                             resultSet.getInt("id"),
-                            resultSet.getInt("phone"));
+                            resultSet.getString("phone"));
 
 
                 }

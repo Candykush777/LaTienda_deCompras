@@ -19,9 +19,9 @@ public class Customer {
 
     private int id;
 
-    private int phone;
+    private String phone;
 
-    public Customer(String name, String first_lastname, String second_lastname, String email, String password, int phone) {
+    public Customer(String name, String first_lastname, String second_lastname, String email, String password, String phone) {
         this.name = name;
         this.first_lastname = first_lastname;
         this.second_lastname = second_lastname;
@@ -30,7 +30,7 @@ public class Customer {
         this.phone = phone;
     }
 
-    public Customer(String name, String first_lastname, String second_lastname, String email, int id, int phone) {
+    public Customer(String name, String first_lastname, String second_lastname, String email, int id, String phone) {
         this.name = name;
         this.first_lastname = first_lastname;
         this.second_lastname = second_lastname;

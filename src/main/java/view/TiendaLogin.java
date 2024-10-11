@@ -30,8 +30,11 @@ public class TiendaLogin extends JFrame {
         setTitle("Iniciar sesión");
         setSize(400, 200);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLayout(new GridLayout(4, 2));
+        setLayout(new BorderLayout());
 
+        //Panel para centrarlo
+
+        JPanel iniciarSesionPAnel=new JPanel(new GridLayout(4,2));
 
         // Crear componentes
         JLabel correoLabel = new JLabel("Correo:");
@@ -39,70 +42,72 @@ public class TiendaLogin extends JFrame {
 
         JLabel passwordLabel = new JLabel("Contraseña:");
         passwordField = new JPasswordField();
-        JButton loginBoton = new JButton("Iniciar sesión");
+
+
 
 
         // Agregar componentes a la ventana
-        add(correoLabel);
-        add(correoField);
-        add(passwordLabel);
-        add(passwordField);
-        add(loginBoton);
-
+        iniciarSesionPAnel.add(correoLabel);
+        iniciarSesionPAnel.add(correoField);
+        iniciarSesionPAnel.add(passwordLabel);
+        iniciarSesionPAnel.add(passwordField);
+        //iniciarSesionPAnel.add(loginBoton);
+        add(iniciarSesionPAnel,BorderLayout.CENTER);
         //acciones de los botones
+
+
+        JButton loginBoton = new JButton("Iniciar sesión");
+        JPanel botonInferior=new JPanel();
+        botonInferior.add(loginBoton);
+        add(botonInferior, BorderLayout.SOUTH);
 
         loginBoton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
 
-
+                iniciarSesion();
             }
         });
+        setLocationRelativeTo(null);
+
+        setVisible(true);
+
 
     }
-        private void IniciarSesion (){
-            String email = correoField.getText();
-            String passwordIngresada = new String(passwordField.getPassword());
 
-            // Llamada al método 'IniciarSesion' desde 'CustomerRepository'
-            Customer customer = customerRepository.realizarLogin(email, passwordIngresada);
-            if (customer != null) {
-                JOptionPane.showMessageDialog(this, "Inicio de sesión con éxito");
-                // Aquí abrirías el menú principal o alguna otra acción
-                dispose(); // Cierra la ventana de inicio de sesión
-            } else {
-                intentosFallidos++;
-                JOptionPane.showMessageDialog(this, "Credenciales incorrectas. Intentos fallidos: " + intentosFallidos);
-            }
-        }
+    private void iniciarSesion() {
 
 
-
-
-    //lo primero es verificar si han superado los intentos, sino es así se continua d emanera normal.
-
-       /* if(intentosFallidos>=MAX_INTENTOS){
-            //System.out.println("Has superado el número de intentos, debes esperar o hacerte una cuenta"); con el
-            //view se hace de otra manera
-
-            JOptionPane.showMessageDialog(tienda,"Has superado el número de intentos, debes esperar o hacerte una cuenta");
+        if (intentosFallidos >= 3) {
+            JOptionPane.showMessageDialog(this, "Has superado el número de intentos, debes esperar o hacerte una cuenta");
             return;
+
         }
+        String email = correoField.getText();
+        String passwordIngresada = new String(passwordField.getPassword());
 
-        //Ahora queremos obetner el email y contraseña del formulario dentro del view
+        // Llamada al método 'realizarLogin' desde 'CustomerRepository'
+        Customer customer = customerRepository.realizarLogin(email, passwordIngresada);
+        if (customer != null) {
 
-        String email=tienda.getTiendaLogin().getCorreoField().getText();
-        String password = new String(tienda.getTiendaLogin().getPasswordField().getPassword());
+            //Me falta poner algo para mantener la sesion activa etc
+            JOptionPane.showMessageDialog(this, "Inicio de sesión con éxito");
+            abrirMenuPrincipal();// Aquí abrirías el menú principal o alguna otra acción
 
-        Customer customer =customerRepository.findByEmail(email);
-
-        if(customer != null && BCrypt.checkpw(password, customer.getPassword())){
-            JOptionPane.showMessageDialog(tienda, "Inicio de sesión exitoso");
-        }
-        else {
+        } else {
             intentosFallidos++;
-            JOptionPane.showMessageDialog(tienda, "Credenciales Incorrectas, Intentos  : " +intentosFallidos);
-        }*/
+            JOptionPane.showMessageDialog(this, "Credenciales incorrectas. Intentos fallidos: " + intentosFallidos);
+        }
+    }
+
+    private void abrirMenuPrincipal() {
+
+        new TiendaMenuPrincipal();
+        this.dispose();// cerramos la ventana anterior
+    }
+
+
+
 }
 
 
